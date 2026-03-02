@@ -9,7 +9,7 @@
 $dark-bg:              #1b1b1e;
 $dark-bg-secondary:    #212125;
 $dark-bg-elevated:     #2a2a2e;
-$dark-bg-code:         #1e1e1e;
+$dark-bg-code:         $dark-bg-elevated;
 $dark-text-primary:    #d2d2d3;
 $dark-text-secondary:  #868689;
 $dark-text-headings:   #f0f0f1;
@@ -537,5 +537,115 @@ a {
 
   &:hover {
     background: lighten($dark-border, 10%);
+  }
+}
+
+// ──────────────────────────────────────
+// VS Code Dark+ Syntax Highlighting (Rouge)
+// ──────────────────────────────────────
+.highlight {
+  // Comments
+  .c, .c1, .cm, .cs, .ch, .cp, .cpf {
+    color: #6a9955;
+    font-style: italic;
+  }
+
+  // Strings
+  .s, .s1, .s2, .sb, .sc, .sd, .sh, .sx, .sr {
+    color: #ce9178;
+  }
+
+  // Keywords
+  .k, .kc, .kd, .kn, .kp, .kr, .kv {
+    color: #569cd6;
+  }
+
+  // Keyword type (e.g. int, string, var)
+  .kt {
+    color: #4ec9b0;
+  }
+
+  // Numbers
+  .m, .mi, .mf, .mh, .mo, .mb, .mx, .il {
+    color: #b5cea8;
+  }
+
+  // Operators
+  .o, .ow {
+    color: #d4d4d4;
+  }
+
+  // Functions / method names
+  .nf, .fm {
+    color: #dcdcaa;
+  }
+
+  // Classes / types
+  .nc, .nn, .no {
+    color: #4ec9b0;
+  }
+
+  // Variables / names
+  .n, .nb, .ni, .ne, .nv, .bp, .vc, .vg, .vi, .vm {
+    color: #9cdcfe;
+  }
+
+  // Attributes / properties
+  .na {
+    color: #9cdcfe;
+  }
+
+  // Tags (HTML/XML)
+  .nt {
+    color: #569cd6;
+  }
+
+  // Punctuation / delimiters
+  .p, .dl {
+    color: #d4d4d4;
+  }
+
+  // Regex
+  .sr {
+    color: #d16969;
+  }
+
+  // Escape characters
+  .se {
+    color: #d7ba7d;
+  }
+
+  // Built-in constants (true, false, nil)
+  .kc {
+    color: #569cd6;
+  }
+
+  // Symbols (Ruby :symbol)
+  .ss {
+    color: #b5cea8;
+  }
+
+  // Interpolation
+  .si {
+    color: #9cdcfe;
+  }
+
+  // Error
+  .err {
+    color: #f44747;
+    background-color: transparent;
+  }
+
+  // Generic (diff, etc.)
+  .gd { color: #f44747; }    // deleted
+  .gi { color: #6a9955; }    // inserted
+  .gh { color: #569cd6; }    // heading
+  .gu { color: #569cd6; }    // subheading
+  .ge { font-style: italic; }
+  .gs { font-weight: bold; }
+
+  // Whitespace
+  .w {
+    color: transparent;
   }
 }
