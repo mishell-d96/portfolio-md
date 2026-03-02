@@ -1,8 +1,31 @@
 @import "normalize";
 @import "rouge-github";
 @import "variables";
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
 
+// ──────────────────────────────────────
+// Dark Theme Variables (Incendium-inspired)
+// ──────────────────────────────────────
+$dark-bg:              #1b1b1e;
+$dark-bg-secondary:    #212125;
+$dark-bg-elevated:     #2a2a2e;
+$dark-bg-code:         #161619;
+$dark-text-primary:    #d2d2d3;
+$dark-text-secondary:  #868689;
+$dark-text-headings:   #f0f0f1;
+$dark-accent:          #6e9fff;       // Soft blue accent (links)
+$dark-accent-hover:    #8fb5ff;
+$dark-border:          #3d3d42;
+$dark-border-subtle:   #2e2e33;
+$dark-header-bg:       #141418;
+$dark-header-gradient: #0d0d11;
+$dark-blockquote:      #8a8a8d;
+$dark-table-border:    #3d3d42;
+$dark-selection:       rgba(110, 159, 255, 0.2);
+
+// ──────────────────────────────────────
+// Breakpoints
+// ──────────────────────────────────────
 @mixin large {
   @media screen and (min-width: #{$large-breakpoint}) {
     @content;
@@ -21,17 +44,28 @@
   }
 }
 
+// ──────────────────────────────────────
+// Base
+// ──────────────────────────────────────
 * {
   box-sizing: border-box;
+}
+
+::selection {
+  background: $dark-selection;
+  color: #fff;
 }
 
 body {
   padding: 0;
   margin: 0;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
-  line-height: 1.5;
-  color: $body-text-color;
+  line-height: 1.7;
+  color: $dark-text-primary;
+  background-color: $dark-bg;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 #skip-to-content {
@@ -47,36 +81,48 @@ body {
     left: 10px;
     height: auto;
     width: auto;
-    background: invert($body-link-color);
-    outline: thick solid invert($body-link-color);
+    background: $dark-accent;
+    color: #fff;
+    outline: thick solid $dark-accent;
   }
 }
 
+// ──────────────────────────────────────
+// Links
+// ──────────────────────────────────────
 a {
-  color: $body-link-color;
+  color: $dark-accent;
   text-decoration: none;
+  transition: color 0.2s ease;
 
   &:hover {
-    text-decoration: underline;
+    color: $dark-accent-hover;
+    text-decoration: none;
   }
 }
 
+// ──────────────────────────────────────
+// Header Buttons
+// ──────────────────────────────────────
 .btn {
   display: inline-block;
   margin-bottom: 1rem;
   color: rgba(255, 255, 255, 0.7);
-  background-color: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-  border-style: solid;
-  border-width: 1px;
-  border-radius: 0.3rem;
-  transition: color 0.2s, background-color 0.2s, border-color 0.2s;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.4rem;
+  transition: all 0.25s ease;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 
   &:hover {
-    color: rgba(255, 255, 255, 0.8);
+    color: #fff;
     text-decoration: none;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   }
 
   + .btn {
@@ -84,7 +130,7 @@ a {
   }
 
   @include large {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem 1.25rem;
   }
 
   @include medium {
@@ -105,14 +151,36 @@ a {
   }
 }
 
+// ──────────────────────────────────────
+// Page Header
+// ──────────────────────────────────────
 .page-header {
-  color: $header-heading-color;
+  color: $dark-text-headings;
   text-align: center;
-  background-color: $header-bg-color;
-  background-image: linear-gradient(120deg, $header-bg-color-secondary, $header-bg-color);
+  background-color: $dark-header-bg;
+  background-image: linear-gradient(135deg, $dark-header-gradient, $dark-header-bg, darken($dark-accent, 35%));
+  border-bottom: 1px solid $dark-border-subtle;
+  position: relative;
+  overflow: hidden;
+
+  // Subtle noise/glow effect
+  &::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      ellipse at 70% 80%,
+      rgba(110, 159, 255, 0.06) 0%,
+      transparent 60%
+    );
+    pointer-events: none;
+  }
 
   @include large {
-    padding: 5rem 6rem;
+    padding: 4rem 6rem;
   }
 
   @include medium {
@@ -127,9 +195,13 @@ a {
 .project-name {
   margin-top: 0;
   margin-bottom: 0.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
 
   @include large {
-    font-size: 3.25rem;
+    font-size: 3rem;
   }
 
   @include medium {
@@ -143,15 +215,17 @@ a {
 
 .project-tagline {
   margin-bottom: 2rem;
-  font-weight: normal;
-  opacity: 0.7;
+  font-weight: 400;
+  opacity: 0.5;
+  position: relative;
+  z-index: 1;
 
   @include large {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
   }
 
   @include medium {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
 
   @include small {
@@ -159,6 +233,9 @@ a {
   }
 }
 
+// ──────────────────────────────────────
+// Main Content
+// ──────────────────────────────────────
 .main-content {
   word-wrap: break-word;
 
@@ -168,80 +245,86 @@ a {
 
   @include large {
     max-width: 64rem;
-    padding: 2rem 6rem;
+    padding: 2.5rem 6rem;
     margin: 0 auto;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   @include medium {
     padding: 2rem 4rem;
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
 
   @include small {
     padding: 2rem 1rem;
     font-size: 1rem;
   }
-  
+
+  // Keyboard keys
   kbd {
-    background-color: #fafbfc;
-    border: 1px solid #c6cbd1;
-    border-bottom-color: #959da5;
-    border-radius: 3px;
-    box-shadow: inset 0 -1px 0 #959da5;
-    color: #444d56;
+    background-color: $dark-bg-elevated;
+    border: 1px solid $dark-border;
+    border-bottom-color: darken($dark-border, 10%);
+    border-radius: 4px;
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+    color: $dark-text-primary;
     display: inline-block;
+    font-family: "Fira Code", Consolas, monospace;
     font-size: 11px;
     line-height: 10px;
-    padding: 3px 5px;
+    padding: 3px 6px;
     vertical-align: middle;
   }
 
   img {
     max-width: 100%;
+    border-radius: 0.4rem;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  // Headings
+  h1, h2, h3, h4, h5, h6 {
     margin-top: 2rem;
     margin-bottom: 1rem;
-    font-weight: normal;
-    color: $section-headings-color;
+    font-weight: 600;
+    color: $dark-text-headings;
+    letter-spacing: -0.01em;
   }
+
+  h1 { border-bottom: 1px solid $dark-border-subtle; padding-bottom: 0.5rem; }
+  h2 { border-bottom: 1px solid $dark-border-subtle; padding-bottom: 0.4rem; }
 
   p {
     margin-bottom: 1em;
   }
 
+  // Inline code
   code {
-    padding: 2px 4px;
-    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    font-size: 0.9rem;
-    color: $code-text-color;
-    background-color: $code-bg-color;
-    border-radius: 0.3rem;
+    padding: 2px 6px;
+    font-family: "Fira Code", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.85rem;
+    color: #e06c75;
+    background-color: $dark-bg-code;
+    border-radius: 4px;
+    border: 1px solid $dark-border-subtle;
   }
 
+  // Code blocks
   pre {
-    padding: 0.8rem;
+    padding: 1rem 1.2rem;
     margin-top: 0;
     margin-bottom: 1rem;
-    font: 1rem Consolas, "Liberation Mono", Menlo, Courier, monospace;
-    color: $code-text-color;
+    font: 0.9rem "Fira Code", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    color: $dark-text-primary;
     word-wrap: normal;
-    background-color: $code-bg-color;
-    border: solid 1px $border-color;
-    border-radius: 0.3rem;
+    background-color: $dark-bg-code;
+    border: 1px solid $dark-border-subtle;
+    border-radius: 0.5rem;
 
     > code {
       padding: 0;
       margin: 0;
-      font-size: 0.9rem;
-      color: $code-text-color;
+      font-size: 0.85rem;
+      color: $dark-text-primary;
       word-break: normal;
       white-space: pre;
       background: transparent;
@@ -260,12 +343,24 @@ a {
 
   .highlight pre,
   pre {
-    padding: 0.8rem;
+    padding: 1rem 1.2rem;
     overflow: auto;
-    font-size: 0.9rem;
-    line-height: 1.45;
-    border-radius: 0.3rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    border-radius: 0.5rem;
     -webkit-overflow-scrolling: touch;
+
+    // Custom scrollbar for code blocks
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: $dark-border;
+      border-radius: 3px;
+    }
   }
 
   pre code,
@@ -286,16 +381,23 @@ a {
     }
   }
 
-  ul,
-  ol {
+  // Lists
+  ul, ol {
     margin-top: 0;
+
+    li {
+      margin-bottom: 0.25rem;
+    }
   }
 
+  // Blockquotes
   blockquote {
-    padding: 0 1rem;
+    padding: 0.5rem 1.2rem;
     margin-left: 0;
-    color: $blockquote-text-color;
-    border-left: 0.3rem solid $border-color;
+    color: $dark-blockquote;
+    border-left: 3px solid $dark-accent;
+    background-color: rgba(110, 159, 255, 0.04);
+    border-radius: 0 0.3rem 0.3rem 0;
 
     > :first-child {
       margin-top: 0;
@@ -306,25 +408,38 @@ a {
     }
   }
 
+  // Tables
   table {
     display: block;
     width: 100%;
     overflow: auto;
     word-break: normal;
-    word-break: keep-all; // For Firefox to horizontally scroll wider tables.
+    word-break: keep-all;
     -webkit-overflow-scrolling: touch;
+    border-collapse: separate;
+    border-spacing: 0;
 
     th {
-      font-weight: bold;
+      font-weight: 600;
+      color: $dark-text-headings;
+      background-color: $dark-bg-elevated;
     }
 
-    th,
-    td {
-      padding: 0.5rem 1rem;
-      border: 1px solid $table-border-color;
+    th, td {
+      padding: 0.6rem 1rem;
+      border: 1px solid $dark-table-border;
+    }
+
+    tr {
+      background-color: $dark-bg;
+
+      &:nth-child(2n) {
+        background-color: $dark-bg-secondary;
+      }
     }
   }
 
+  // Definition lists
   dl {
     padding: 0;
 
@@ -332,7 +447,8 @@ a {
       padding: 0;
       margin-top: 1rem;
       font-size: 1rem;
-      font-weight: bold;
+      font-weight: 600;
+      color: $dark-text-headings;
     }
 
     dd {
@@ -341,38 +457,85 @@ a {
     }
   }
 
+  // Horizontal rules
   hr {
-    height: 2px;
+    height: 1px;
     padding: 0;
-    margin: 1rem 0;
-    background-color: $hr-border-color;
+    margin: 2rem 0;
+    background-color: $dark-border-subtle;
     border: 0;
   }
 }
 
+// ──────────────────────────────────────
+// Footer
+// ──────────────────────────────────────
 .site-footer {
   padding-top: 2rem;
   margin-top: 2rem;
-  border-top: solid 1px $hr-border-color;
+  border-top: 1px solid $dark-border-subtle;
 
   @include large {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   @include medium {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 
   @include small {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
   }
 }
 
 .site-footer-owner {
   display: block;
-  font-weight: bold;
+  font-weight: 600;
+  color: $dark-text-headings;
 }
 
 .site-footer-credits {
-  color: $blockquote-text-color;
+  color: $dark-text-secondary;
+}
+
+// ──────────────────────────────────────
+// Smooth transitions for interactive feel
+// ──────────────────────────────────────
+.main-content {
+  a {
+    transition: color 0.2s ease;
+    border-bottom: 1px solid transparent;
+
+    &:hover {
+      border-bottom-color: $dark-accent-hover;
+    }
+  }
+
+  img {
+    transition: opacity 0.3s ease;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
+
+// ──────────────────────────────────────
+// Scrollbar (global)
+// ──────────────────────────────────────
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: $dark-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $dark-border;
+  border-radius: 4px;
+
+  &:hover {
+    background: lighten($dark-border, 10%);
+  }
 }
