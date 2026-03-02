@@ -10,6 +10,8 @@ $dark-bg:              #1b1b1e;
 $dark-bg-secondary:    #212125;
 $dark-bg-elevated:     #2a2a2e;
 $dark-bg-code:         $dark-bg-elevated;
+$dark-sidebar:         #161618;
+$dark-sidebar-width:   260px;
 $dark-text-primary:    #d2d2d3;
 $dark-text-secondary:  #868689;
 $dark-text-headings:   #f0f0f1;
@@ -180,7 +182,7 @@ a {
   }
 
   @include large {
-    padding: 4rem 6rem;
+    padding: 3.5rem 4rem;
   }
 
   @include medium {
@@ -189,6 +191,7 @@ a {
 
   @include small {
     padding: 2rem 1rem;
+    padding-top: 3.5rem; // Room for hamburger
   }
 }
 
@@ -517,6 +520,195 @@ a {
     &:hover {
       opacity: 0.9;
     }
+  }
+}
+
+// ──────────────────────────────────────
+// Sidebar
+// ──────────────────────────────────────
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: $dark-sidebar-width;
+  height: 100vh;
+  background-color: $dark-sidebar;
+  border-right: 1px solid $dark-border-subtle;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+
+  @include small {
+    transform: translateX(-100%);
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
+}
+
+.sidebar-header {
+  padding: 2rem 1.5rem 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid $dark-border-subtle;
+}
+
+.sidebar-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin-bottom: 0.75rem;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.sidebar-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: $dark-text-headings;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.sidebar-tagline {
+  font-size: 0.8rem;
+  color: $dark-text-secondary;
+  margin: 0;
+  font-style: italic;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 1.5rem;
+  color: $dark-text-secondary;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    color: $dark-text-primary;
+    background-color: rgba(255, 255, 255, 0.04);
+    text-decoration: none;
+    border-left-color: rgba(110, 159, 255, 0.3);
+  }
+
+  &.active {
+    color: $dark-text-headings;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-left-color: $dark-accent;
+  }
+}
+
+.sidebar-nav-icon {
+  font-size: 1rem;
+  width: 1.25rem;
+  text-align: center;
+}
+
+.sidebar-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid $dark-border-subtle;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.sidebar-footer-link {
+  color: $dark-text-secondary;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $dark-text-headings;
+    text-decoration: none;
+  }
+}
+
+// ──────────────────────────────────────
+// Mobile sidebar toggle & overlay
+// ──────────────────────────────────────
+.sidebar-toggle {
+  display: none;
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 200;
+  background: $dark-bg-elevated;
+  border: 1px solid $dark-border;
+  border-radius: 6px;
+  padding: 8px 7px;
+  cursor: pointer;
+  flex-direction: column;
+  gap: 4px;
+
+  span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background-color: $dark-text-primary;
+    border-radius: 1px;
+    transition: all 0.25s ease;
+  }
+
+  &.active span:nth-child(1) {
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+  &.active span:nth-child(2) {
+    opacity: 0;
+  }
+  &.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(4px, -4px);
+  }
+
+  @include small {
+    display: flex;
+  }
+}
+
+.sidebar-overlay {
+  display: none;
+
+  @include small {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+// ──────────────────────────────────────
+// Content wrapper (pushed by sidebar)
+// ──────────────────────────────────────
+.content-wrapper {
+  margin-left: $dark-sidebar-width;
+  min-height: 100vh;
+
+  @include small {
+    margin-left: 0;
   }
 }
 
