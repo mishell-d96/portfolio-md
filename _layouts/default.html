@@ -29,7 +29,7 @@
         {% if site.logo %}
           <img src="{{ site.logo | relative_url }}" alt="avatar" class="sidebar-avatar">
         {% endif %}
-        <h1 class="sidebar-title">"{{ site.title | default: site.github.repository_name }}"</h1>
+        <h1 class="sidebar-title">{{ site.title | default: site.github.repository_name }}</h1>
         {% if site.description %}
           <p class="sidebar-tagline">{{ site.description | default: site.github.project_tagline }}</p>
         {% endif %}

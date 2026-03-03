@@ -10,12 +10,9 @@ sidebar_links:
   - title: Home
     url: /
     icon: "🏠"
-  - title: Categories
-    url: /categories/
+  - title: Projects
+    url: /projects.html
     icon: "📂"
-  - title: Tags
-    url: /tags/
-    icon: "🏷️"
   - title: About
-    url: /about/
+    url: /about.html
     icon: "👤"
