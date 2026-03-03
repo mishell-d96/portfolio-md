@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
+    <title>Michel Disbergen</title>
     <meta charset="UTF-8">
     {% seo %}
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -28,7 +29,7 @@
         {% if site.logo %}
           <img src="{{ site.logo | relative_url }}" alt="avatar" class="sidebar-avatar">
         {% endif %}
-        <h1 class="sidebar-title">{{ site.title | default: site.github.repository_name }}</h1>
+        <h1 class="sidebar-title">"{{ site.title | default: site.github.repository_name }}"</h1>
         {% if site.description %}
           <p class="sidebar-tagline">{{ site.description | default: site.github.project_tagline }}</p>
         {% endif %}
