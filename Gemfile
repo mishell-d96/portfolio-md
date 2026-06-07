@@ -9,3 +9,7 @@ gemspec
 # whose native extension currently fails to compile on CI runners
 # (NameError: uninitialized constant JSON::Fragment).
 gem "jekyll", "~> 3.10"
+
+# Jekyll 3.10 ships kramdown 2.x, which moved the GitHub-Flavored-Markdown parser
+# (Jekyll's default `markdown` input) into this separate gem.
+gem "kramdown-parser-gfm"
