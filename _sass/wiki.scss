@@ -266,53 +266,102 @@ mark.search-hit {
   text-transform: lowercase;
 }
 
-// ── Pentest parameters panel ─────────────────────────────────
-.params-panel {
-  margin: 0 0 1.75rem;
-  border: 1px solid $dark-border-subtle;
-  border-radius: 8px;
-  background-color: $dark-bg-secondary;
-  overflow: hidden;
-}
-
-.params-toggle {
+// ── Sidebar trigger for the parameters modal ─────────────────
+.sidebar-params-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   width: 100%;
-  padding: 0.7rem 1rem;
+  padding: 0.7rem 1.5rem;
   background: none;
   border: none;
-  color: $dark-text-headings;
+  border-top: 1px solid $dark-border-subtle;
+  color: $dark-text-secondary;
   font: inherit;
+  font-size: 0.8rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   text-align: left;
   cursor: pointer;
+  transition: all 0.2s ease;
 
-  &:hover { background-color: rgba(255, 255, 255, 0.03); }
-  .params-toggle-icon { color: $dark-accent; }
-  .params-toggle-hint { font-weight: 400; color: $dark-text-secondary; font-size: 0.8rem; }
+  &:hover { color: $dark-text-headings; background-color: rgba(255, 255, 255, 0.04); }
 }
 
-.params-body {
-  padding: 0.5rem 1rem 1rem;
-  border-top: 1px solid $dark-border-subtle;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.6rem 0.9rem;
+// ── Pentest parameters modal ─────────────────────────────────
+.params-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 
   &[hidden] { display: none; }
 }
-
+.params-modal-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+.params-modal-dialog {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+  max-height: 88vh;
+  overflow-y: auto;
+  background-color: $dark-bg-secondary;
+  border: 1px solid $dark-border;
+  border-radius: 10px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+.params-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  h2 { margin: 0; font-size: 1.15rem; border: none; }
+}
+.params-modal-close {
+  background: none;
+  border: none;
+  color: $dark-text-secondary;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  &:hover { color: $dark-text-headings; }
+}
+.params-modal-intro {
+  margin: 0.35rem 0 1rem;
+  font-size: 0.82rem;
+  color: $dark-text-secondary;
+  code { font-size: 0.78rem; }
+}
+.params-group {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem 1rem;
+  border: 1px solid $dark-border-subtle;
+  border-radius: 8px;
+  legend { padding: 0 0.4rem; font-size: 0.78rem; font-weight: 600; color: $dark-accent; text-transform: uppercase; letter-spacing: 0.05em; }
+}
+.params-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.65rem 0.9rem;
+}
 .param-field {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
 
-  label { font-size: 0.72rem; color: $dark-text-secondary; font-family: 'Fira Code', monospace; }
+  label { font-size: 0.74rem; color: $dark-text-primary; font-family: 'Fira Code', monospace; }
+  .param-hint { color: $dark-text-secondary; font-weight: 400; }
   input {
-    padding: 0.4rem 0.55rem;
+    padding: 0.42rem 0.55rem;
     font-family: 'Fira Code', monospace;
     font-size: 0.82rem;
     color: $dark-text-primary;
@@ -323,25 +372,29 @@ mark.search-hit {
     &:focus { border-color: $dark-accent; box-shadow: 0 0 0 2px $dark-selection; }
   }
 }
-
-.params-actions {
-  grid-column: 1 / -1;
+.params-modal-footer {
   display: flex;
   gap: 0.6rem;
-  align-items: center;
-  margin-top: 0.2rem;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
 }
 .params-btn {
-  padding: 0.35rem 0.8rem;
-  font-size: 0.8rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.85rem;
   color: $dark-text-primary;
   background-color: $dark-bg-elevated;
   border: 1px solid $dark-border;
-  border-radius: 5px;
+  border-radius: 6px;
   cursor: pointer;
   &:hover { border-color: $dark-accent; color: $dark-text-headings; }
+  &.primary {
+    color: #0d0d11;
+    background-color: $dark-accent;
+    border-color: $dark-accent;
+    font-weight: 600;
+    &:hover { background-color: $dark-accent-hover; }
+  }
 }
-.params-note { font-size: 0.75rem; color: $dark-text-secondary; }
 
 // Substituted placeholders inside code blocks
 .param-filled { color: $dark-accent-hover; font-weight: 600; }
@@ -452,6 +505,6 @@ textarea.tool-input, textarea.tool-output { min-height: 7rem; resize: vertical; 
 
 // ── Mobile ───────────────────────────────────────────────────
 @include small {
-  .params-body { grid-template-columns: 1fr 1fr; }
+  .params-grid { grid-template-columns: 1fr 1fr; }
   .code-copy-btn { opacity: 1; }  // no hover on touch
 }

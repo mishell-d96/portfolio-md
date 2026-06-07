@@ -72,6 +72,11 @@
         {% endfor %}
       </nav>
 
+      <button type="button" class="sidebar-params-btn" id="params-open" title="Set pentest parameters (applied across the wiki)">
+        <span class="sidebar-nav-icon">⚙</span>
+        Pentest parameters
+      </button>
+
       <div class="sidebar-footer">
         {% if site.github.is_project_page %}
           <a href="{{ site.github.repository_url }}" class="sidebar-footer-link" title="GitHub">
@@ -153,7 +158,25 @@
         overlay.addEventListener('click', closeSidebar);
       })();
     </script>
+    <!-- Global pentest parameters modal (values persist across the whole site) -->
+    <div class="params-modal" id="params-modal" hidden>
+      <div class="params-modal-overlay" id="params-modal-overlay"></div>
+      <div class="params-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="params-modal-title">
+        <div class="params-modal-header">
+          <h2 id="params-modal-title">⚙ Pentest parameters</h2>
+          <button type="button" class="params-modal-close" id="params-close" aria-label="Close">×</button>
+        </div>
+        <p class="params-modal-intro">Set these once — they're saved in your browser and substituted into every command across the wiki. Unset values show as <code>{% raw %}{{NAME}}{% endraw %}</code>.</p>
+        <div class="params-modal-body" id="params-body"></div>
+        <div class="params-modal-footer">
+          <button type="button" class="params-btn" id="params-clear">Clear all</button>
+          <button type="button" class="params-btn primary" id="params-done">Done</button>
+        </div>
+      </div>
+    </div>
+
     <script src="{{ '/assets/js/sidebar.js' | relative_url }}" defer></script>
     <script src="{{ '/assets/js/search.js' | relative_url }}" data-search-url="{{ '/search.json?v=' | append: site.github.build_revision | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/pentest-params.js' | relative_url }}" defer></script>
   </body>
 </html>
