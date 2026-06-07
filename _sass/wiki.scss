@@ -3,77 +3,120 @@
 // jekyll-theme-cayman.scss (imported before this partial).
 // ============================================================
 
-// ── Sidebar: live search ─────────────────────────────────────
-.sidebar-search {
+// ── Top full-text search bar + dropdown ──────────────────────
+.topsearch {
   position: sticky;
   top: 0;
-  z-index: 5;
-  padding: 0.85rem 1rem;
-  background-color: $dark-sidebar;
+  z-index: 30;
+  background-color: $dark-bg;
   border-bottom: 1px solid $dark-border-subtle;
-
-  input[type="search"] {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0.5rem 0.7rem;
-    font-size: 0.85rem;
-    color: $dark-text-primary;
-    background-color: $dark-bg-elevated;
-    border: 1px solid $dark-border;
-    border-radius: 6px;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-
-    &::placeholder { color: $dark-text-secondary; }
-    &:focus {
-      border-color: $dark-accent;
-      box-shadow: 0 0 0 2px $dark-selection;
-    }
-  }
 }
+.topsearch-inner {        // mirrors .main-content width + side padding
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.9rem 6rem;
+  @include medium { padding: 0.9rem 4rem; }
+  @include small { padding: 0.75rem 1rem; }
+}
+.topsearch-box { position: relative; }
+.topsearch-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  color: $dark-text-secondary;
+  pointer-events: none;
+}
+.topsearch-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 2.6rem;
+  font-size: 0.95rem;
+  color: $dark-text-primary;
+  background-color: $dark-bg-elevated;
+  border: 1px solid $dark-border;
+  border-radius: 8px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &::placeholder { color: $dark-text-secondary; }
+  &:focus { border-color: $dark-accent; box-shadow: 0 0 0 3px $dark-selection; }
+}
+.topsearch-kbd {
+  position: absolute;
+  right: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.1rem 0.45rem;
+  font-size: 0.75rem;
+  font-family: 'Fira Code', monospace;
+  color: $dark-text-secondary;
+  background-color: $dark-bg-secondary;
+  border: 1px solid $dark-border;
+  border-radius: 4px;
+  pointer-events: none;
+}
+.topsearch.active .topsearch-kbd { display: none; }
 
 .search-results {
-  list-style: none;
-  margin: 0.5rem 0 0;
-  padding: 0;
-  max-height: 50vh;
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 40;
+  max-height: 70vh;
   overflow-y: auto;
+  padding: 0.35rem;
   border: 1px solid $dark-border;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: $dark-bg-secondary;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 
   &[hidden] { display: none; }
 
-  li { margin: 0; }
-
-  a {
+  .sr-item {
     display: block;
-    padding: 0.5rem 0.7rem;
-    border-bottom: 1px solid $dark-border-subtle;
+    padding: 0.6rem 0.75rem;
+    border-radius: 6px;
     color: $dark-text-primary;
-    font-size: 0.82rem;
-    line-height: 1.3;
-    text-transform: none;
-    letter-spacing: normal;
 
-    &:hover, &.kb-active {
-      background-color: rgba(255, 255, 255, 0.05);
-      text-decoration: none;
-    }
+    &:hover, &.kb-active { background-color: rgba(255, 255, 255, 0.06); text-decoration: none; }
   }
-  li:last-child a { border-bottom: none; }
-
-  .sr-title { display: block; color: $dark-text-headings; font-weight: 600; }
+  .sr-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+  .sr-title { color: $dark-text-headings; font-weight: 600; font-size: 0.92rem; }
   .sr-cat {
-    display: inline-block;
-    margin-top: 0.15rem;
-    font-size: 0.7rem;
+    flex-shrink: 0;
+    font-size: 0.68rem;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
     color: $dark-text-secondary;
   }
+  .sr-teaser {
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: $dark-text-secondary;
+    font-family: 'Fira Code', monospace;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
   mark { background-color: $dark-selection; color: $dark-accent-hover; padding: 0 1px; border-radius: 2px; }
-  .sr-empty { padding: 0.6rem 0.7rem; color: $dark-text-secondary; font-size: 0.8rem; }
+  .sr-empty { padding: 0.7rem 0.75rem; color: $dark-text-secondary; font-size: 0.85rem; }
+}
+
+// keep anchored headings clear of the sticky search bar
+.wiki-content {
+  h1, h2, h3, h4, h5, h6 { scroll-margin-top: 4.5rem; }
+}
+
+// search-term highlight on the destination page
+mark.search-hit {
+  background-color: rgba(110, 159, 255, 0.28);
+  color: $dark-text-headings;
+  border-radius: 2px;
+  padding: 0 1px;
 }
 
 // ── Sidebar: collapsible nav groups ──────────────────────────
@@ -139,6 +182,58 @@
     background-color: rgba(255, 255, 255, 0.06);
     border-left-color: $dark-accent;
   }
+}
+
+// ── Nested sidebar sections (active page's headings) ─────────
+.nav-sections {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.18);
+  border-left: 3px solid $dark-accent;
+}
+.nav-section {
+  display: block;
+  padding: 0.3rem 1.25rem 0.3rem 3.5rem;
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: $dark-text-secondary;
+  border-left: 2px solid transparent;
+  margin-left: -3px;             // align with the parent accent border
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &.nav-section-h3 { padding-left: 4.5rem; font-size: 0.73rem; opacity: 0.92; }
+  &:hover { color: $dark-text-primary; text-decoration: none; }
+  &.current { color: $dark-accent-hover; border-left-color: $dark-accent; }
+}
+
+// ── Previous / Next page navigation ──────────────────────────
+.page-nav {
+  display: flex;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid $dark-border-subtle;
+}
+.page-nav-link {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.85rem 1.1rem;
+  border: 1px solid $dark-border-subtle;
+  border-radius: 8px;
+  background-color: $dark-bg-secondary;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+
+  &:hover { border-color: $dark-accent; background-color: $dark-bg-elevated; text-decoration: none; }
+  &.next { text-align: right; }
+
+  .page-nav-dir { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; color: $dark-text-secondary; }
+  .page-nav-title { font-size: 0.95rem; font-weight: 600; color: $dark-text-headings; }
+}
+
+@include small {
+  .page-nav { flex-direction: column; }
 }
 
 // ── Wiki page header ─────────────────────────────────────────

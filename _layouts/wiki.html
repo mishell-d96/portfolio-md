@@ -26,6 +26,39 @@ layout: default
   <div class="wiki-content">
     {{ content }}
   </div>
+
+  {% comment %} Flat page order = category order (wiki_categories) then page order. {% endcomment %}
+  {% assign flat = "" %}
+  {% for cat in site.wiki_categories %}
+    {% assign cps = site.wiki | where: "category", cat.key | where_exp: "p", "p.nav_hidden != true" | sort: "order" %}
+    {% for p in cps %}{% assign flat = flat | append: p.url | append: "::" | append: p.title | append: "||" %}{% endfor %}
+  {% endfor %}
+  {% assign entries = flat | split: "||" %}
+  {% assign foundidx = -1 %}
+  {% for e in entries %}
+    {% assign parts = e | split: "::" %}
+    {% if parts[0] == page.url %}{% assign foundidx = forloop.index0 %}{% endif %}
+  {% endfor %}
+  {% if foundidx >= 0 %}
+    {% assign previdx = foundidx | minus: 1 %}
+    {% assign nextidx = foundidx | plus: 1 %}
+    <nav class="page-nav">
+      {% if foundidx > 0 %}
+        {% assign pp = entries[previdx] | split: "::" %}
+        <a class="page-nav-link prev" href="{{ pp[0] | relative_url }}">
+          <span class="page-nav-dir">← Previous</span>
+          <span class="page-nav-title">{{ pp[1] }}</span>
+        </a>
+      {% else %}<span></span>{% endif %}
+      {% if nextidx < entries.size %}
+        {% assign np = entries[nextidx] | split: "::" %}
+        <a class="page-nav-link next" href="{{ np[0] | relative_url }}">
+          <span class="page-nav-dir">Next →</span>
+          <span class="page-nav-title">{{ np[1] }}</span>
+        </a>
+      {% else %}<span></span>{% endif %}
+    </nav>
+  {% endif %}
 </article>
 
 {% if page.tool %}
@@ -42,3 +75,4 @@ layout: default
 
 <script src="{{ '/assets/js/code-enhance.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/js/pentest-params.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/wiki-nav.js' | relative_url }}" defer></script>
