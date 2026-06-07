@@ -35,10 +35,15 @@
         {% endif %}
       </div>
 
+      <!-- Live wiki search -->
+      <div class="sidebar-search">
+        <input type="search" id="wiki-search" placeholder="Search the wiki…" autocomplete="off" aria-label="Search the wiki">
+        <ul id="wiki-search-results" class="search-results" hidden></ul>
+      </div>
+
       <nav class="sidebar-nav">
         <!--
-          Customize your sidebar links here.
-          Add/remove items as needed. Use site.baseurl for relative links.
+          Top-level links are configured via `sidebar_links` in _config.yml.
         -->
         {% for link in site.sidebar_links %}
           <a href="{{ link.url | relative_url }}" class="sidebar-nav-item {% if page.url == link.url %}active{% endif %}">
@@ -47,21 +52,30 @@
           </a>
         {% endfor %}
 
-        <!-- Fallback if no sidebar_links are configured in _config.yml -->
-        {% if site.sidebar_links == nil %}
-          <a href="{{ '/' | relative_url }}" class="sidebar-nav-item {% if page.url == '/' %}active{% endif %}">
-            <span class="sidebar-nav-icon">🏠</span>
-            HOME
-          </a>
-          {% for p in site.pages %}
-            {% if p.title and p.title != '' and p.url != '/' %}
-              <a href="{{ p.url | relative_url }}" class="sidebar-nav-item {% if page.url == p.url %}active{% endif %}">
-                <span class="sidebar-nav-icon">📄</span>
-                {{ p.title | upcase }}
-              </a>
-            {% endif %}
-          {% endfor %}
-        {% endif %}
+        <!--
+          Wiki category groups (collapsible). Order comes from `wiki_categories`
+          in _config.yml; pages are grouped by their `category` front matter and
+          sorted by `order`. Drop a markdown file in _wiki/<category>/ to add a page.
+        -->
+        {% for cat in site.wiki_categories %}
+          {% assign cat_pages = site.wiki | where: "category", cat.key | where_exp: "p", "p.nav_hidden != true" | sort: "order" %}
+          {% if cat_pages.size > 0 %}
+            {% assign is_open = false %}
+            {% if page.category == cat.key %}{% assign is_open = true %}{% endif %}
+            <div class="nav-group {% if is_open %}open{% endif %}" data-group="{{ cat.key }}">
+              <button type="button" class="nav-group-toggle" aria-expanded="{% if is_open %}true{% else %}false{% endif %}">
+                <span class="sidebar-nav-icon">{{ cat.icon }}</span>
+                <span class="nav-group-title">{{ cat.title }}</span>
+                <span class="nav-group-caret" aria-hidden="true">▸</span>
+              </button>
+              <div class="nav-group-items">
+                {% for p in cat_pages %}
+                  <a href="{{ p.url | relative_url }}" class="sidebar-nav-subitem {% if page.url == p.url %}active{% endif %}">{{ p.title }}</a>
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
       </nav>
 
       <div class="sidebar-footer">
@@ -131,5 +145,7 @@
         overlay.addEventListener('click', closeSidebar);
       })();
     </script>
+    <script src="{{ '/assets/js/sidebar.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/search.js' | relative_url }}" data-search-url="{{ '/search.json?v=' | append: site.github.build_revision | relative_url }}" defer></script>
   </body>
 </html>

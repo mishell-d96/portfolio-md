@@ -1,0 +1,44 @@
+---
+layout: default
+---
+<article class="wiki-page" data-category="{{ page.category }}">
+  <header class="wiki-header">
+    <p class="wiki-breadcrumb">
+      <a href="{{ '/wiki/' | relative_url }}">Wiki</a>
+      {% if page.category %}<span class="sep">/</span> <span class="wiki-cat">{{ page.category }}</span>{% endif %}
+    </p>
+    <h1 class="wiki-title">{{ page.title }}</h1>
+    {% if page.description %}<p class="wiki-desc">{{ page.description }}</p>{% endif %}
+    {% if page.tags and page.tags.size > 0 %}
+      <p class="wiki-tags">{% for t in page.tags %}<span class="wiki-tag">{{ t }}</span>{% endfor %}</p>
+    {% endif %}
+  </header>
+
+  <!-- Pentest parameters panel (filled in by pentest-params.js) -->
+  <section class="params-panel" id="params-panel" hidden>
+    <button type="button" class="params-toggle" id="params-toggle" aria-expanded="false">
+      <span class="params-toggle-icon">⚙</span> Pentest parameters
+      <span class="params-toggle-hint">— substituted into every command on this page</span>
+    </button>
+    <div class="params-body" id="params-body" hidden></div>
+  </section>
+
+  <div class="wiki-content">
+    {{ content }}
+  </div>
+</article>
+
+{% if page.tool %}
+  {% for lib in page.tool_libs %}
+    {% case lib %}
+      {% when 'cryptojs' %}<script src="{{ '/assets/js/vendor/crypto.min.js' | relative_url }}"></script>
+      {% when 'bcrypt' %}<script src="{{ '/assets/js/vendor/bcrypt.min.js' | relative_url }}"></script>
+      {% when 'md4' %}<script src="{{ '/assets/js/vendor/md4.min.js' | relative_url }}"></script>
+      {% when 'beautify' %}<script src="{{ '/assets/js/vendor/beautify.min.js' | relative_url }}"></script><script src="{{ '/assets/js/vendor/beautify-css.min.js' | relative_url }}"></script><script src="{{ '/assets/js/vendor/beautify-html.min.js' | relative_url }}"></script>
+    {% endcase %}
+  {% endfor %}
+  <script src="{{ '/assets/js/tools/' | append: page.tool_script | append: '.js' | relative_url }}" defer></script>
+{% endif %}
+
+<script src="{{ '/assets/js/code-enhance.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/pentest-params.js' | relative_url }}" defer></script>

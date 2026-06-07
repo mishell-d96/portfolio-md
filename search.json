@@ -1,0 +1,16 @@
+---
+layout: null
+permalink: /search.json
+---
+[
+{% assign items = site.wiki | where_exp: "p", "p.search_hidden != true" | sort: "order" %}
+{% for p in items %}
+  {
+    "title": {{ p.title | jsonify }},
+    "category": {{ p.category | jsonify }},
+    "url": {{ p.url | relative_url | jsonify }},
+    "tags": {{ p.tags | jsonify }},
+    "body": {{ p.content | strip_html | normalize_whitespace | truncatewords: 200 | jsonify }}
+  }{% unless forloop.last %},{% endunless %}
+{% endfor %}
+]

@@ -13,6 +13,33 @@ sidebar_links:
   - title: Projects
     url: /projects.html
     icon: "📂"
+  - title: Wiki
+    url: /wiki/
+    icon: "🛡️"
   - title: About
     url: /about.html
     icon: "👤"
+
+# ── Wiki collection ──────────────────────────────────────────
+collections:
+  wiki:
+    output: true
+    permalink: /wiki/:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: wiki
+    values:
+      layout: wiki
+
+# Ordered list of wiki categories → drives the sidebar nav groups.
+# Add a new category here (and create _wiki/<key>/) to extend the wiki.
+wiki_categories:
+  - { key: exploits,   title: Exploits,   icon: "💥" }
+  - { key: shells,     title: Shells,     icon: "🐚" }
+  - { key: checklists, title: Checklists, icon: "✅" }
+  - { key: commands,   title: Commands,   icon: "⌨️" }
+  - { key: resources,  title: Resources,  icon: "🔗" }
+  - { key: tools,      title: Tools,      icon: "🛠️" }
+

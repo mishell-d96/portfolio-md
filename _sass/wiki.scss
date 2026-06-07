@@ -1,0 +1,362 @@
+// ============================================================
+// Wiki additions — reuses the dark theme variables defined in
+// jekyll-theme-cayman.scss (imported before this partial).
+// ============================================================
+
+// ── Sidebar: live search ─────────────────────────────────────
+.sidebar-search {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  padding: 0.85rem 1rem;
+  background-color: $dark-sidebar;
+  border-bottom: 1px solid $dark-border-subtle;
+
+  input[type="search"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+    color: $dark-text-primary;
+    background-color: $dark-bg-elevated;
+    border: 1px solid $dark-border;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &::placeholder { color: $dark-text-secondary; }
+    &:focus {
+      border-color: $dark-accent;
+      box-shadow: 0 0 0 2px $dark-selection;
+    }
+  }
+}
+
+.search-results {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  max-height: 50vh;
+  overflow-y: auto;
+  border: 1px solid $dark-border;
+  border-radius: 6px;
+  background-color: $dark-bg-secondary;
+
+  &[hidden] { display: none; }
+
+  li { margin: 0; }
+
+  a {
+    display: block;
+    padding: 0.5rem 0.7rem;
+    border-bottom: 1px solid $dark-border-subtle;
+    color: $dark-text-primary;
+    font-size: 0.82rem;
+    line-height: 1.3;
+    text-transform: none;
+    letter-spacing: normal;
+
+    &:hover, &.kb-active {
+      background-color: rgba(255, 255, 255, 0.05);
+      text-decoration: none;
+    }
+  }
+  li:last-child a { border-bottom: none; }
+
+  .sr-title { display: block; color: $dark-text-headings; font-weight: 600; }
+  .sr-cat {
+    display: inline-block;
+    margin-top: 0.15rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: $dark-text-secondary;
+  }
+  mark { background-color: $dark-selection; color: $dark-accent-hover; padding: 0 1px; border-radius: 2px; }
+  .sr-empty { padding: 0.6rem 0.7rem; color: $dark-text-secondary; font-size: 0.8rem; }
+}
+
+// ── Sidebar: collapsible nav groups ──────────────────────────
+.nav-group { display: flex; flex-direction: column; }
+
+.nav-group-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.65rem 1.5rem;
+  background: none;
+  border: none;
+  border-left: 3px solid transparent;
+  color: $dark-text-secondary;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover { color: $dark-text-primary; background-color: rgba(255, 255, 255, 0.04); }
+
+  .nav-group-title { flex: 1; }
+  .nav-group-caret {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+    color: $dark-text-secondary;
+  }
+}
+
+.nav-group.open > .nav-group-toggle .nav-group-caret { transform: rotate(90deg); }
+
+.nav-group-items {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s ease;
+  overflow: hidden;
+}
+.nav-group.open > .nav-group-items { grid-template-rows: 1fr; }
+.nav-group-items > * { min-height: 0; }
+
+.sidebar-nav-subitem {
+  display: block;
+  padding: 0.45rem 1.5rem 0.45rem 3rem;
+  color: $dark-text-secondary;
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
+
+  &:hover {
+    color: $dark-text-primary;
+    background-color: rgba(255, 255, 255, 0.03);
+    text-decoration: none;
+    border-left-color: rgba(110, 159, 255, 0.3);
+  }
+  &.active {
+    color: $dark-text-headings;
+    background-color: rgba(255, 255, 255, 0.06);
+    border-left-color: $dark-accent;
+  }
+}
+
+// ── Wiki page header ─────────────────────────────────────────
+.wiki-header { margin-bottom: 1.5rem; }
+
+.wiki-breadcrumb {
+  margin: 0 0 0.5rem;
+  font-size: 0.78rem;
+  color: $dark-text-secondary;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  a { color: $dark-text-secondary; &:hover { color: $dark-accent; } }
+  .sep { margin: 0 0.35rem; opacity: 0.5; }
+  .wiki-cat { color: $dark-text-primary; }
+}
+
+.wiki-title { margin: 0 0 0.4rem; }
+.wiki-desc { margin: 0 0 0.75rem; color: $dark-text-secondary; font-size: 0.95rem; }
+
+.wiki-tags { margin: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.wiki-tag {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.72rem;
+  color: $dark-accent;
+  background-color: rgba(110, 159, 255, 0.1);
+  border: 1px solid rgba(110, 159, 255, 0.25);
+  border-radius: 999px;
+  text-transform: lowercase;
+}
+
+// ── Pentest parameters panel ─────────────────────────────────
+.params-panel {
+  margin: 0 0 1.75rem;
+  border: 1px solid $dark-border-subtle;
+  border-radius: 8px;
+  background-color: $dark-bg-secondary;
+  overflow: hidden;
+}
+
+.params-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background: none;
+  border: none;
+  color: $dark-text-headings;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover { background-color: rgba(255, 255, 255, 0.03); }
+  .params-toggle-icon { color: $dark-accent; }
+  .params-toggle-hint { font-weight: 400; color: $dark-text-secondary; font-size: 0.8rem; }
+}
+
+.params-body {
+  padding: 0.5rem 1rem 1rem;
+  border-top: 1px solid $dark-border-subtle;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.6rem 0.9rem;
+
+  &[hidden] { display: none; }
+}
+
+.param-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+  label { font-size: 0.72rem; color: $dark-text-secondary; font-family: 'Fira Code', monospace; }
+  input {
+    padding: 0.4rem 0.55rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    color: $dark-text-primary;
+    background-color: $dark-bg-elevated;
+    border: 1px solid $dark-border;
+    border-radius: 5px;
+    outline: none;
+    &:focus { border-color: $dark-accent; box-shadow: 0 0 0 2px $dark-selection; }
+  }
+}
+
+.params-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+.params-btn {
+  padding: 0.35rem 0.8rem;
+  font-size: 0.8rem;
+  color: $dark-text-primary;
+  background-color: $dark-bg-elevated;
+  border: 1px solid $dark-border;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover { border-color: $dark-accent; color: $dark-text-headings; }
+}
+.params-note { font-size: 0.75rem; color: $dark-text-secondary; }
+
+// Substituted placeholders inside code blocks
+.param-filled { color: $dark-accent-hover; font-weight: 600; }
+.param-empty {
+  color: $dark-text-secondary;
+  border-bottom: 1px dashed $dark-text-secondary;
+  opacity: 0.85;
+}
+
+// ── Code blocks: copy button ─────────────────────────────────
+.code-wrap { position: relative; }
+.code-copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  font-family: 'Inter', sans-serif;
+  color: $dark-text-secondary;
+  background-color: rgba(42, 42, 46, 0.85);
+  border: 1px solid $dark-border;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+
+  &:hover { color: $dark-text-headings; border-color: $dark-accent; }
+  &.copied { color: $dark-accent; border-color: $dark-accent; }
+}
+.code-wrap:hover .code-copy-btn { opacity: 1; }
+
+// ── Interactive tool pages ───────────────────────────────────
+.tool-root {
+  margin: 1rem 0 2rem;
+  padding: 1.25rem;
+  border: 1px solid $dark-border-subtle;
+  border-radius: 8px;
+  background-color: $dark-bg-secondary;
+}
+.tool-field { display: flex; flex-direction: column; gap: 0.35rem; margin-bottom: 1rem; }
+.tool-field label { font-size: 0.8rem; color: $dark-text-secondary; font-weight: 600; }
+.tool-row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-bottom: 1rem; }
+
+.tool-input, .tool-output, .tool-select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.55rem 0.7rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.85rem;
+  color: $dark-text-primary;
+  background-color: $dark-bg-elevated;
+  border: 1px solid $dark-border;
+  border-radius: 6px;
+  outline: none;
+  &:focus { border-color: $dark-accent; box-shadow: 0 0 0 2px $dark-selection; }
+}
+textarea.tool-input, textarea.tool-output { min-height: 7rem; resize: vertical; line-height: 1.5; }
+.tool-output { background-color: $dark-bg-code; color: $dark-text-primary; }
+.tool-select { width: auto; min-width: 160px; cursor: pointer; }
+
+.tool-btn {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #0d0d11;
+  background-color: $dark-accent;
+  border: 1px solid $dark-accent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  &:hover { background-color: $dark-accent-hover; }
+}
+.tool-btn.secondary {
+  color: $dark-text-primary;
+  background-color: $dark-bg-elevated;
+  border-color: $dark-border;
+  &:hover { border-color: $dark-accent; color: $dark-text-headings; }
+}
+.tool-note { font-size: 0.8rem; color: $dark-text-secondary; margin: 0.5rem 0; }
+.tool-status { font-size: 0.8rem; color: $dark-accent; min-height: 1.1em; }
+
+// ── Wiki landing cards ───────────────────────────────────────
+.wiki-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.wiki-card {
+  padding: 1.1rem 1.25rem;
+  border: 1px solid $dark-border-subtle;
+  border-radius: 8px;
+  background-color: $dark-bg-secondary;
+  transition: border-color 0.2s ease;
+  &:hover { border-color: $dark-border; }
+}
+.wiki-card-title {
+  margin: 0 0 0.6rem;
+  font-size: 1.05rem;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.wiki-card-list { list-style: none; margin: 0; padding: 0; }
+.wiki-card-list li { margin: 0.25rem 0; }
+.wiki-card-list a { font-size: 0.88rem; }
+
+// ── Mobile ───────────────────────────────────────────────────
+@include small {
+  .params-body { grid-template-columns: 1fr 1fr; }
+  .code-copy-btn { opacity: 1; }  // no hover on touch
+}
