@@ -1,6 +1,8 @@
 ---
 layout: default
 ---
+{% assign asset_ver = site.time | date: '%s' %}
+<div class="wiki-layout">
 <article class="wiki-page" data-category="{{ page.category }}">
   <header class="wiki-header">
     <p class="wiki-breadcrumb">
@@ -51,6 +53,8 @@ layout: default
     </nav>
   {% endif %}
 </article>
+{% unless page.tool %}<aside class="on-this-page" id="on-this-page" aria-label="On this page"></aside>{% endunless %}
+</div><!-- /.wiki-layout -->
 
 {% if page.tool %}
   {% for lib in page.tool_libs %}
@@ -61,8 +65,8 @@ layout: default
       {% when 'beautify' %}<script src="{{ '/assets/js/vendor/beautify.min.js' | relative_url }}"></script><script src="{{ '/assets/js/vendor/beautify-css.min.js' | relative_url }}"></script><script src="{{ '/assets/js/vendor/beautify-html.min.js' | relative_url }}"></script>
     {% endcase %}
   {% endfor %}
-  <script src="{{ '/assets/js/tools/' | append: page.tool_script | append: '.js' | relative_url }}" defer></script>
+  <script src="{{ '/assets/js/tools/' | append: page.tool_script | append: '.js?v=' | append: asset_ver | relative_url }}" defer></script>
 {% endif %}
 
-<script src="{{ '/assets/js/code-enhance.js' | relative_url }}" defer></script>
-<script src="{{ '/assets/js/wiki-nav.js' | relative_url }}" defer></script>
+<script src="{{ '/assets/js/code-enhance.js?v=' | append: asset_ver | relative_url }}" defer></script>
+<script src="{{ '/assets/js/wiki-enhance.js?v=' | append: asset_ver | relative_url }}" defer></script>

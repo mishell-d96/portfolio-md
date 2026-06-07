@@ -13,6 +13,16 @@
     pre.parentNode.insertBefore(wrap, pre);
     wrap.appendChild(pre);
 
+    // language label (read from Rouge's .language-xxx wrapper)
+    var rouge = pre.closest('.highlighter-rouge');
+    var m = rouge && rouge.className.match(/language-([\w-]+)/);
+    if (m && m[1] !== 'text') {
+      var lbl = document.createElement('span');
+      lbl.className = 'code-lang';
+      lbl.textContent = m[1];
+      wrap.appendChild(lbl);
+    }
+
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'code-copy-btn';

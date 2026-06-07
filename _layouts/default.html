@@ -1,3 +1,6 @@
+{% comment %} Asset cache-buster = build time (changes every build, locally and on
+   GitHub Pages) so rebuilds never serve a stale cached CSS/JS copy. {% endcomment %}
+{% assign asset_ver = site.time | date: '%s' %}
 <!DOCTYPE html>
 <html lang="{{ site.lang | default: "en-US" }}">
   <head>
@@ -10,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#1b1b1e">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: asset_ver | relative_url }}">
     {% include head-custom.html %}
   </head>
   <body>
@@ -119,7 +122,7 @@
         </div>
       </div>
 
-      <main id="content" class="main-content" role="main">
+      <main id="content" class="main-content {% if page.collection == 'wiki' and page.tool != true %}has-toc{% endif %}" role="main">
         {{ content }}
 
         <footer class="site-footer">
@@ -175,8 +178,8 @@
       </div>
     </div>
 
-    <script src="{{ '/assets/js/sidebar.js' | relative_url }}" defer></script>
-    <script src="{{ '/assets/js/search.js' | relative_url }}" data-search-url="{{ '/search.json?v=' | append: site.github.build_revision | relative_url }}" defer></script>
-    <script src="{{ '/assets/js/pentest-params.js' | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/sidebar.js?v=' | append: asset_ver | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/search.js?v=' | append: asset_ver | relative_url }}" data-search-url="{{ '/search.json?v=' | append: asset_ver | relative_url }}" defer></script>
+    <script src="{{ '/assets/js/pentest-params.js?v=' | append: asset_ver | relative_url }}" defer></script>
   </body>
 </html>

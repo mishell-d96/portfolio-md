@@ -184,28 +184,6 @@ mark.search-hit {
   }
 }
 
-// ── Nested sidebar sections (active page's headings) ─────────
-.nav-sections {
-  display: flex;
-  flex-direction: column;
-  background-color: rgba(0, 0, 0, 0.18);
-  border-left: 3px solid $dark-accent;
-}
-.nav-section {
-  display: block;
-  padding: 0.3rem 1.25rem 0.3rem 3.5rem;
-  font-size: 0.76rem;
-  line-height: 1.35;
-  color: $dark-text-secondary;
-  border-left: 2px solid transparent;
-  margin-left: -3px;             // align with the parent accent border
-  transition: color 0.15s ease, border-color 0.15s ease;
-
-  &.nav-section-h3 { padding-left: 4.5rem; font-size: 0.73rem; opacity: 0.92; }
-  &:hover { color: $dark-text-primary; text-decoration: none; }
-  &.current { color: $dark-accent-hover; border-left-color: $dark-accent; }
-}
-
 // ── Previous / Next page navigation ──────────────────────────
 .page-nav {
   display: flex;
@@ -502,6 +480,138 @@ textarea.tool-input, textarea.tool-output { min-height: 7rem; resize: vertical; 
 .wiki-card-list { list-style: none; margin: 0; padding: 0; }
 .wiki-card-list li { margin: 0.25rem 0; }
 .wiki-card-list a { font-size: 0.88rem; }
+
+// ── Layout: content + "On this page" column ──────────────────
+.wiki-layout { display: block; }
+.on-this-page { display: none; }
+
+@media (min-width: 1280px) {
+  .main-content.has-toc { max-width: 82rem; padding-left: 3.5rem; padding-right: 3.5rem; }
+  .wiki-layout { display: flex; align-items: flex-start; gap: 2.5rem; }
+  .wiki-layout .wiki-page { flex: 1 1 auto; min-width: 0; }   // min-width:0 → code blocks can shrink/scroll
+  .on-this-page {
+    display: block;
+    flex: 0 0 200px;
+    width: 200px;
+    position: sticky;
+    top: 5rem;
+    max-height: calc(100vh - 6rem);
+    overflow-y: auto;
+    font-size: 0.82rem;
+  }
+}
+
+.otp-title {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: $dark-text-secondary;
+  margin-bottom: 0.6rem;
+  padding-left: 0.8rem;
+}
+.otp-nav { display: flex; flex-direction: column; border-left: 1px solid $dark-border-subtle; }
+.otp-link {
+  padding: 0.28rem 0.8rem;
+  color: $dark-text-secondary;
+  line-height: 1.35;
+  border-left: 2px solid transparent;
+  margin-left: -1px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+
+  &.otp-h3 { padding-left: 1.6rem; font-size: 0.78rem; }
+  &:hover { color: $dark-text-primary; text-decoration: none; }
+  &.current { color: $dark-accent-hover; border-left-color: $dark-accent; }
+}
+
+// ── Collapsible chapters ─────────────────────────────────────
+.chapters-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+.chapters-btn {
+  padding: 0.25rem 0.7rem;
+  font-size: 0.75rem;
+  color: $dark-text-secondary;
+  background-color: $dark-bg-elevated;
+  border: 1px solid $dark-border;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover { color: $dark-text-headings; border-color: $dark-accent; }
+}
+.chapter { margin: 0; }
+.chapter-head {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+
+  .chapter-caret {
+    margin-left: auto;
+    font-size: 0.8rem;
+    color: $dark-text-secondary;
+    transition: transform 0.2s ease;
+  }
+  &:hover .chapter-caret { color: $dark-text-primary; }
+}
+.chapter:not(.open) .chapter-head .chapter-caret { transform: rotate(-90deg); }
+.chapter:not(.open) .chapter-body { display: none; }
+.chapter:not(.open) .chapter-head { margin-bottom: 0.5rem; opacity: 0.92; }
+
+// ── Heading anchor links ─────────────────────────────────────
+.wiki-content {
+  h2, h3 { position: relative; }
+  .h-anchor {
+    margin-left: 0.4rem;
+    color: $dark-text-secondary;
+    opacity: 0;
+    font-weight: 400;
+    text-decoration: none;
+    transition: opacity 0.15s ease, color 0.15s ease;
+    &:hover { color: $dark-accent; }
+  }
+  h2:hover .h-anchor, h3:hover .h-anchor { opacity: 0.6; }
+}
+
+// ── Code block language label ────────────────────────────────
+.code-lang {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.7rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $dark-text-secondary;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.code-wrap:hover .code-lang { opacity: 0.65; }
+
+// ── Back-to-top button ───────────────────────────────────────
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-size: 1.1rem;
+  color: $dark-text-primary;
+  background-color: $dark-bg-elevated;
+  border: 1px solid $dark-border;
+  border-radius: 50%;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+
+  &.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+  &:hover { border-color: $dark-accent; color: $dark-text-headings; }
+}
 
 // ── Mobile ───────────────────────────────────────────────────
 @include small {
