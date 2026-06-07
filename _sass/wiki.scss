@@ -4,19 +4,16 @@
 // ============================================================
 
 // ── Top full-text search bar + dropdown ──────────────────────
+// Lives inside .main-content, so it inherits the content's width, padding and
+// centering automatically — the bar always lines up with the page content.
 .topsearch {
   position: sticky;
   top: 0;
   z-index: 30;
+  margin: 0 0 1.75rem;
+  padding: 0.85rem 0;
   background-color: $dark-bg;
   border-bottom: 1px solid $dark-border-subtle;
-}
-.topsearch-inner {        // mirrors .main-content width + side padding
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 0.9rem 6rem;
-  @include medium { padding: 0.9rem 4rem; }
-  @include small { padding: 0.75rem 1rem; }
 }
 .topsearch-box { position: relative; }
 .topsearch-icon {
@@ -320,26 +317,50 @@ mark.search-hit {
   code { font-size: 0.78rem; }
 }
 .params-group {
-  margin: 0 0 1rem;
-  padding: 0.75rem 1rem 1rem;
+  margin: 0 0 1.1rem;
+  padding: 1rem 1.15rem 1.15rem;
   border: 1px solid $dark-border-subtle;
   border-radius: 8px;
-  legend { padding: 0 0.4rem; font-size: 0.78rem; font-weight: 600; color: $dark-accent; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  &:last-of-type { margin-bottom: 0; }
+  legend {
+    padding: 0 0.5rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: $dark-accent;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
 }
 .params-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-  gap: 0.65rem 0.9rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem 1.1rem;
 }
 .param-field {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.25rem;
 
-  label { font-size: 0.74rem; color: $dark-text-primary; font-family: 'Fira Code', monospace; }
-  .param-hint { color: $dark-text-secondary; font-weight: 400; }
+  label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: $dark-text-headings;
+    font-family: 'Fira Code', monospace;
+    line-height: 1.2;
+  }
+  .param-hint {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 400;
+    color: $dark-text-secondary;
+    margin-top: 0.1rem;
+  }
   input {
-    padding: 0.42rem 0.55rem;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.45rem 0.6rem;
     font-family: 'Fira Code', monospace;
     font-size: 0.82rem;
     color: $dark-text-primary;
@@ -347,6 +368,7 @@ mark.search-hit {
     border: 1px solid $dark-border;
     border-radius: 5px;
     outline: none;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
     &:focus { border-color: $dark-accent; box-shadow: 0 0 0 2px $dark-selection; }
   }
 }
@@ -615,6 +637,6 @@ textarea.tool-input, textarea.tool-output { min-height: 7rem; resize: vertical; 
 
 // ── Mobile ───────────────────────────────────────────────────
 @include small {
-  .params-grid { grid-template-columns: 1fr 1fr; }
+  .params-grid { grid-template-columns: 1fr; }
   .code-copy-btn { opacity: 1; }  // no hover on touch
 }

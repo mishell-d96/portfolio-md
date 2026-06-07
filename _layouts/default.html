@@ -39,46 +39,48 @@
       </div>
 
       <nav class="sidebar-nav">
-        <!--
-          Top-level links are configured via `sidebar_links` in _config.yml.
-        -->
-        {% for link in site.sidebar_links %}
-          <a href="{{ link.url | relative_url }}" class="sidebar-nav-item {% if page.url == link.url %}active{% endif %}">
-            <span class="sidebar-nav-icon">{{ link.icon }}</span>
-            {{ link.title }}
+        {% if page.collection == 'wiki' %}
+          <!-- Wiki section: return link + the wiki's own table of contents -->
+          <a href="{{ '/' | relative_url }}" class="sidebar-nav-item sidebar-back">
+            <span class="sidebar-nav-icon">←</span>
+            Back to site
           </a>
-        {% endfor %}
-
-        <!--
-          Wiki category groups (collapsible). Order comes from `wiki_categories`
-          in _config.yml; pages are grouped by their `category` front matter and
-          sorted by `order`. Drop a markdown file in _wiki/<category>/ to add a page.
-        -->
-        {% for cat in site.wiki_categories %}
-          {% assign cat_pages = site.wiki | where: "category", cat.key | where_exp: "p", "p.nav_hidden != true" | sort: "order" %}
-          {% if cat_pages.size > 0 %}
-            {% assign is_open = false %}
-            {% if page.category == cat.key %}{% assign is_open = true %}{% endif %}
-            <div class="nav-group {% if is_open %}open{% endif %}" data-group="{{ cat.key }}">
-              <button type="button" class="nav-group-toggle" aria-expanded="{% if is_open %}true{% else %}false{% endif %}">
-                <span class="sidebar-nav-icon">{{ cat.icon }}</span>
-                <span class="nav-group-title">{{ cat.title }}</span>
-                <span class="nav-group-caret" aria-hidden="true">▸</span>
-              </button>
-              <div class="nav-group-items">
-                {% for p in cat_pages %}
-                  <a href="{{ p.url | relative_url }}" class="sidebar-nav-subitem {% if page.url == p.url %}active{% endif %}">{{ p.title }}</a>
-                {% endfor %}
+          {% for cat in site.wiki_categories %}
+            {% assign cat_pages = site.wiki | where: "category", cat.key | where_exp: "p", "p.nav_hidden != true" | sort: "order" %}
+            {% if cat_pages.size > 0 %}
+              {% assign is_open = false %}
+              {% if page.category == cat.key %}{% assign is_open = true %}{% endif %}
+              <div class="nav-group {% if is_open %}open{% endif %}" data-group="{{ cat.key }}">
+                <button type="button" class="nav-group-toggle" aria-expanded="{% if is_open %}true{% else %}false{% endif %}">
+                  <span class="sidebar-nav-icon">{{ cat.icon }}</span>
+                  <span class="nav-group-title">{{ cat.title }}</span>
+                  <span class="nav-group-caret" aria-hidden="true">▸</span>
+                </button>
+                <div class="nav-group-items">
+                  {% for p in cat_pages %}
+                    <a href="{{ p.url | relative_url }}" class="sidebar-nav-subitem {% if page.url == p.url %}active{% endif %}">{{ p.title }}</a>
+                  {% endfor %}
+                </div>
               </div>
-            </div>
-          {% endif %}
-        {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% else %}
+          <!-- Portfolio section: top-level links from `sidebar_links` in _config.yml -->
+          {% for link in site.sidebar_links %}
+            <a href="{{ link.url | relative_url }}" class="sidebar-nav-item {% if page.url == link.url %}active{% endif %}">
+              <span class="sidebar-nav-icon">{{ link.icon }}</span>
+              {{ link.title }}
+            </a>
+          {% endfor %}
+        {% endif %}
       </nav>
 
-      <button type="button" class="sidebar-params-btn" id="params-open" title="Set pentest parameters (applied across the wiki)">
-        <span class="sidebar-nav-icon">⚙</span>
-        Pentest parameters
-      </button>
+      {% if page.collection == 'wiki' %}
+        <button type="button" class="sidebar-params-btn" id="params-open" title="Set pentest parameters (applied across the wiki)">
+          <span class="sidebar-nav-icon">⚙</span>
+          Pentest parameters
+        </button>
+      {% endif %}
 
       <div class="sidebar-footer">
         {% if site.github.is_project_page %}
@@ -108,21 +110,21 @@
 <!--        {% endif %}-->
 <!--      </header>-->
 
-      <!-- Top full-text search bar -->
-      <div class="topsearch" id="topsearch">
-        <div class="topsearch-inner">
-          <div class="topsearch-box">
-            <span class="topsearch-icon" aria-hidden="true">
-              <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="6"></circle><line x1="14" y1="14" x2="18" y2="18" stroke-linecap="round"></line></svg>
-            </span>
-            <input type="search" id="wiki-search" class="topsearch-input" placeholder="Search the wiki…  (press / )" autocomplete="off" aria-label="Search the wiki" aria-expanded="false">
-            <kbd class="topsearch-kbd">/</kbd>
-            <div id="wiki-search-results" class="search-results" role="listbox" hidden></div>
-          </div>
-        </div>
-      </div>
 
       <main id="content" class="main-content {% if page.collection == 'wiki' and page.tool != true %}has-toc{% endif %}" role="main">
+        {% if page.collection == 'wiki' %}
+          <!-- Top full-text search bar (wiki section only) -->
+          <div class="topsearch" id="topsearch">
+            <div class="topsearch-box">
+              <span class="topsearch-icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="6"></circle><line x1="14" y1="14" x2="18" y2="18" stroke-linecap="round"></line></svg>
+              </span>
+              <input type="search" id="wiki-search" class="topsearch-input" placeholder="Search the wiki…  (press / )" autocomplete="off" aria-label="Search the wiki" aria-expanded="false">
+              <kbd class="topsearch-kbd">/</kbd>
+              <div id="wiki-search-results" class="search-results" role="listbox" hidden></div>
+            </div>
+          </div>
+        {% endif %}
         {{ content }}
 
         <footer class="site-footer">
@@ -161,7 +163,8 @@
         overlay.addEventListener('click', closeSidebar);
       })();
     </script>
-    <!-- Global pentest parameters modal (values persist across the whole site) -->
+    {% if page.collection == 'wiki' %}
+    <!-- Pentest parameters modal (wiki section; values persist in the browser) -->
     <div class="params-modal" id="params-modal" hidden>
       <div class="params-modal-overlay" id="params-modal-overlay"></div>
       <div class="params-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="params-modal-title">
@@ -177,9 +180,12 @@
         </div>
       </div>
     </div>
+    {% endif %}
 
     <script src="{{ '/assets/js/sidebar.js?v=' | append: asset_ver | relative_url }}" defer></script>
+    {% if page.collection == 'wiki' %}
     <script src="{{ '/assets/js/search.js?v=' | append: asset_ver | relative_url }}" data-search-url="{{ '/search.json?v=' | append: asset_ver | relative_url }}" defer></script>
     <script src="{{ '/assets/js/pentest-params.js?v=' | append: asset_ver | relative_url }}" defer></script>
+    {% endif %}
   </body>
 </html>
