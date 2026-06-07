@@ -57,9 +57,11 @@
                   <span class="nav-group-caret" aria-hidden="true">▸</span>
                 </button>
                 <div class="nav-group-items">
-                  {% for p in cat_pages %}
-                    <a href="{{ p.url | relative_url }}" class="sidebar-nav-subitem {% if page.url == p.url %}active{% endif %}">{{ p.title }}</a>
-                  {% endfor %}
+                  <div class="nav-group-inner">
+                    {% for p in cat_pages %}
+                      <a href="{{ p.url | relative_url }}" class="sidebar-nav-subitem {% if page.url == p.url %}active{% endif %}">{{ p.title }}</a>
+                    {% endfor %}
+                  </div>
                 </div>
               </div>
             {% endif %}
